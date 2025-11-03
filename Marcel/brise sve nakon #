@@ -1,0 +1,30 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<sstream>
+using namespace std;
+
+/*zadatak koji brise sve nakon #*/
+
+void funkcija(string& recenica) {
+	string novi;
+	auto it = find_if(recenica.begin(),recenica.end(), [](char c) {
+		return c == '#';
+		});
+
+	copy(recenica.begin(), it, back_inserter(novi));
+
+	cout << novi << endl;
+
+
+}
+
+
+int main() {
+	string recenica = "mam kupi mi auto # bicikli i romobil";
+	funkcija(recenica);
+
+
+	return 0;
+}
