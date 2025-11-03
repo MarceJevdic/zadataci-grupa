@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+string najduzipalindrom(string rijec) {
+	string najdulji = "";
+	auto palindr = [](string& s) {
+		return equal(s.begin(), s.begin() + s.size() / 2, s.rbegin());
+		};
+	for (int i = 0; i < rijec.size(); i++) {
+		for (int j = i; j < rijec.size(); j++) {
+			string sab = rijec.substr(i,j-i+1);
+			if (palindr(sab)) {
+				if (sab.size() > najdulji.size()) {
+					najdulji=sab;
+				}
+			}
+		}
+	}
+	return najdulji;
+	
+}
+int main() {
+	string rijec = "annanas";
+	cout << najduzipalindrom(rijec);
+	return 0;
+}
