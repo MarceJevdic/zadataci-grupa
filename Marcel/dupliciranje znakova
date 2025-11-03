@@ -1,0 +1,31 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<sstream>
+using namespace std;
+
+/*Napišite funkciju koja duplicira sve elemente vektora. Koristite insert*/
+
+template <typename t>
+void funkcija(vector<t>& a){
+
+	for (auto it = a.begin();it != a.end();it++) {
+		it = a.insert(it + 1, *it);
+	}
+
+	for (auto d : a) {
+		cout << d << " ";
+	}
+	cout << endl;
+}
+
+int main() {
+	vector<int> a = { 1,2,3,4 };
+	funkcija(a);
+
+	vector<string> s = { "mae","mae" };
+	funkcija(s);
+
+	return 0;
+}
