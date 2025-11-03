@@ -1,0 +1,47 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+/*Napišite funkciju koja prima dva vektora i vraća vektor onih elemenata koji se nalaze
+u prvom vektoru, ali se ne nalaze u drugom. Koristite std::binary_search.
+*/
+
+template <typename t>
+vector<t> funkcija(vector<t>& v1, vector<t>& v2) {
+	vector<t> novi;
+
+	sort(v2.begin(), v2.end());
+
+	for (auto x : v1) {
+		if (binary_search(v2.begin(), v2.end(), x)) {
+			novi.push_back(x);
+		}
+	}
+	return novi;
+
+}
+
+int main() {
+	vector<int> v1 = { 1,2,3,4,5 };
+	vector<int> v2 = { 2,3,5,6 };
+	funkcija(v1, v2);
+
+	vector<string> b1 = { "mama","tata" };
+	vector<string> b2 = { "baba","tata" };
+	funkcija(b1, b2);
+
+	auto rez = funkcija(v1, v2);
+	auto rez1 = funkcija(b1, b2);
+
+	for (auto a : rez) {
+		cout << a << " ";
+	}
+
+	for (auto b : rez1) {
+		cout << b << " ";
+	}
+
+	return 0;
+}
