@@ -1,0 +1,22 @@
+#include<iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+void funkcija(string& text) {
+	auto samog = [&](char c) {
+		return string("aeiouAEIOU").find(c) != string::npos;
+		};
+	for (size_t i = 0; i < text.size(); i++) {
+		if (samog(text[i])) {
+			text.insert(i + 1,1,':');
+			i = i + 1;
+		}
+	}
+
+}
+int main() {
+	string text = "ja sam dobro";
+	funkcija(text);
+	cout << text;
+	return 0;
+}
