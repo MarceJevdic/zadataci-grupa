@@ -1,0 +1,28 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<sstream>
+using namespace std;
+
+/*Napišite program koji sortira vektor stringova po duljini stringa (od najkraćeg prema
+najdužem) koristeći std::sort s lambda funkcijom.*/
+
+void funkcija(vector<string>& a) {
+	
+	sort(a.begin(), a.end(), [](const string& s1, const string& s2) {
+		return s1.length() < s2.length();
+		});
+
+	for (string b : a) {
+		cout << b << " ";
+	}
+}
+
+int main() {
+	vector<string> a = { "jasam","djevojka","sa","sela","ekeperapedesetiempo","m" };
+	funkcija(a);
+
+
+	return 0;
+}
