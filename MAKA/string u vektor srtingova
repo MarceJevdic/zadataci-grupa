@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+#include <sstream>
+using namespace std;
+vector<string> funkcija(string& text) {
+	vector<string> rijeci;
+	stringstream ss(text);
+	string a;
+	while (ss >> a) {
+		rijeci.push_back(a);
+	}
+	return rijeci;
+}
+
+int main() {
+	string text = "ja sam maka";
+	vector<string> rijeci= funkcija(text);
+	
+	for (auto& rijeci : rijeci) {
+		cout <<rijeci<< " ";
+	}
+
+	return 0;
+}
