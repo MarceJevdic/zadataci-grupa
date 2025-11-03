@@ -1,0 +1,32 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<sstream>
+using namespace std;
+
+/*Napišite funkciju koja za string koji predstavlja ime i prezime vraća string u kojem su
+inicijali.
+"John Johnny Depp"-> "J.J.D."*/
+
+string funkcija(string& a) {
+	stringstream ss(a);
+	string rjec;
+	string inicijali;
+	while (ss >> rjec) {
+		char c = toupper(rjec[0]);
+		inicijali.push_back(c);
+		inicijali += '.';
+	}
+	return inicijali;
+}
+
+
+int main() {
+	string a = "marcel jevdic kralj";
+	string rez = funkcija(a);
+	cout << rez;
+
+
+	return 0;
+}
