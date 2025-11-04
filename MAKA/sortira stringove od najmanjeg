@@ -1,0 +1,19 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void funkcija(vector <string>& s) {
+	sort(s.begin(), s.end(), [](string v,string v1) {
+		return (v.size()<v1.size());
+		});
+	for (auto x : s) {
+		cout << x<<endl;
+	}
+	
+}
+
+int main() {
+	vector <string> v = { "jarfvrtg","sam","maka" };
+	funkcija(v);
+	return 0;
+}
