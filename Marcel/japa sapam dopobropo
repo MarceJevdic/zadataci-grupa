@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+void funkcija(string& a) {
+	auto it = a.begin();
+	while (true) {
+
+		it = find_if(it, a.end(), [](char a) {
+			return a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u'
+				|| a == 'A' || a == 'E' || a == 'I' || a == 'O' || a == 'U';
+			});
+		if (it != a.end()) {
+			char c = (*it);
+			it = a.insert(it + 1, 'p');
+			it = a.insert(it + 1, c);
+		}
+		else {
+			break;
+		}
+
+
+		it++;
+	}
+	cout << a << " ";
+}
+
+int main() {
+	string a = "ja sam dobro";
+	funkcija(a);
+
+	return 0;
+}
