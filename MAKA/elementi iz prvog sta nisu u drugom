@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+template <typename T> 
+vector<T> funkcija(vector<T>& v1, vector<T>& v2) {
+	vector<T> novi;
+	sort(v1.begin(), v1.end());
+	sort(v2.begin(), v2.end());
+	for (T x : v1) {
+		if (!(binary_search(v2.begin(), v2.end(), x))) {
+			novi.push_back(x);
+		}
+	}
+	return novi;
+}
+int main() {
+	
+	vector<int> brojevi = { 1,2,3,4,5,6};
+	vector<int> brojevi1 = { 4,5,6 };
+	vector<int> rez=funkcija(brojevi, brojevi1);
+	for (auto x : rez) {
+		cout << x;
+	}
+	return 0;
+}
