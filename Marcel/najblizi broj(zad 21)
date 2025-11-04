@@ -1,0 +1,25 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+using namespace std;
+
+/*Napišite program koji u vektoru brojeva pronalazi broj najbliži zadanom broju koristeći
+std::min_element i lambda izraz sa capture (capture je zadani broj).*/
+
+void funkcija(vector<int>& v) {
+	int broj = 10;
+
+	auto it = min_element(v.begin(), v.end(), [&broj](int a,int b) {
+		return abs(a - broj) < abs(b - broj);
+		});
+
+	cout << *it;
+
+}
+
+int main() {
+	vector<int> v = { 1,2,5,7,11,13,15 };
+	funkcija(v);
+	return 0;
+}
