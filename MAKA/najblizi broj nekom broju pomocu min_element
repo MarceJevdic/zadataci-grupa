@@ -1,0 +1,20 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+void funkcija(vector<int>& v) {
+	int broj = 10;
+	auto it = max_element(v.begin(), v.end(),[&broj](int a,int b) {
+		return ((abs(a - broj)) < (abs(b - broj)));
+		});
+	cout << *it;
+}
+
+int main() {
+	vector<int> v= { 2,3,5,6,9,7,3,1 };
+	funkcija(v);
+
+	return 0;
+}
