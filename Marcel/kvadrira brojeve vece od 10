@@ -1,0 +1,34 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+/*Napišite program koji iz vektora cijelih brojeva filtrira sve brojeve veće od 10, kvadrira
+ih i sprema u novi vektor. Za filtriranje koristite lambda izraz.
+*/
+void funkcija(vector<int>& a) {
+	vector<int> novi;
+
+	copy_if(a.begin(), a.end(), back_inserter(novi), [](int a) {
+		if (a > 10) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		});
+
+
+
+	for (int b : novi) {
+		b = b * b;
+		cout << b << " ";
+	}
+}
+int main() {
+	vector<int> a = { 1,2,3,4,10,11,22 };
+	funkcija(a);
+
+	return 0;
+}
