@@ -1,0 +1,27 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+/*Napišite program koji u vektoru stringova pronalazi najduži i najkraći string koristeći
+std::max_element i std::min_element s lambda funkcijom.*/
+
+void funkcija(vector<string>& v1){
+	auto it1 = min_element(v1.begin(), v1.end(), [](string s1,string s2) {
+		return (s1.size() < s2.size());
+		});
+	auto it2 = max_element(v1.begin(), v1.end(), [](string s1, string s2) {
+		return (s1.size() < s2.size());
+		});
+
+	cout << *it1 << endl;
+	cout << *it2 << endl;
+}
+
+int main() {
+	vector<string> v1 = { "mama","kupi","mi","laburdzinija" };
+	funkcija(v1);
+
+
+	return 0;
+}
