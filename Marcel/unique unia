@@ -1,0 +1,41 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+/*Napišite funkciju koja od dva vektora formira treći u kojem su svi elementi prva dva
+vektora, ali sortirani i jedinstveni.*/
+template <typename T>
+void funkcija(vector<T>& v1, vector<T>& v2) {
+	vector<T> novi;
+
+	for (auto a : v1) {
+		novi.push_back(a);
+	}
+
+	for (auto b : v2) {
+		novi.push_back(b);
+	}
+
+	sort(novi.begin(), novi.end());
+
+	auto it = unique(novi.begin(), novi.end());
+	novi.erase(it, novi.end());
+
+
+
+	for (auto b : novi) {
+		cout << b << " ";
+	}
+
+
+}
+
+int main() {
+	vector<int> v1 = { 1,2,3,4,5,6 };
+	vector<int> v2 = { 2,3,5,7};
+	funkcija(v1, v2);
+
+
+	return 0;
+}
