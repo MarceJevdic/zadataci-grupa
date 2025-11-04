@@ -1,0 +1,31 @@
+#include <iostream>
+#include <algorithm>
+#include <numeric>
+#include <vector>
+#include <string>
+using namespace std;
+/*Napišite program koji u vektoru brojeva uklanja sve duplikate koristeći std::sort i
+ std::remove.*/
+void funkcija(vector<int>& v) {
+    sort(v.begin(), v.end());
+    size_t i = 0;
+    auto it = remove_if(v.begin(), v.end(), [&i](int x) {
+        if (x == i) {
+            return true;
+        }
+        else {
+            i = x;
+            return false;
+        }
+        });
+    
+    v.erase(it, v.end());
+    for (int x : v) {
+        cout << x << " ";
+    }
+}
+int main() {
+    vector<int>v = { 2,7,5,9,3,3,5,1,6,9 };
+    funkcija(v);
+    return 0;
+}
