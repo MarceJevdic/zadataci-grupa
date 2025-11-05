@@ -1,0 +1,51 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+/*Napravi klasu Osoba koja ima:
+string ime
+int godine
+Napravi konstruktor koji prima ime i godine i sprema ih u objekt.
+Napravi metodu ispisi() koja ispisuje:
+Ime: [ime], Godine: [godine]
+U main():
+Kreiraj dva objekta klase Osoba s različitim imenima i godinama
+Pozovi za svaki objekt metodu ispisi()*/
+
+class Osoba {
+public:
+	string ime;
+	  int godine;
+
+	  Osoba(string a, int b) {
+		  ime = a;
+		  godine = b;
+	  }
+
+	  void ispis() {
+		  cout << "Ime: " << ime << " -" << " Godine: " << godine << endl;
+	}
+};
+
+int main() {
+	srand(time(0));
+	vector<string> ljudi = { "Marcel","Duje","Maka","Laura","Nirvana"};	
+	vector<int> godista = { 2004,2005,2004,2005,2006};
+
+	vector<Osoba> osobe;
+
+	for (int i = 0;i < ljudi.size();i++) {
+
+		int random_godiste = godista[rand() % godista.size()];
+		osobe.push_back(Osoba(ljudi[i],random_godiste));
+	}
+
+	for (auto& a : osobe) {
+		a.ispis();
+	}
+
+	return 0;
+}
