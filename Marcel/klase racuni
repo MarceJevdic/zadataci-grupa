@@ -1,0 +1,65 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+/* Zadatak: Napravi klasu Racun (imeVlasnika, stanje), konstruktor, metode uplata(), isplata() i ispisi(); 
+u main() kreiraj 2-3 racuna, napravi uplate/isplate i ispisi stanje*/
+
+class Racun {
+public:
+	string imeVlasnika;
+	int stanje;
+
+	Racun(string a,int b) {
+		imeVlasnika = a;
+		stanje = b;
+	}
+
+	void uplata(int broj) {
+		stanje = stanje + broj;
+	}
+
+	void isplata(int broj) {
+		if (broj < stanje) {
+			stanje = stanje - broj;
+		}
+		else {
+			cout << "Nema dovoljno sredstava";
+		}
+	}
+
+	void ispisi() {
+		cout << "Ime korisnika: " << imeVlasnika << "   " << "Stanje racuna: " << stanje << "$" <<endl;
+	}
+
+	void ispisuplata() {
+		cout << "Ime korisnika: " << imeVlasnika << "   " << "Stanje racuna nakon uplate: " << stanje << "$" << endl;
+	}
+
+	void ispisisplate() {
+		cout << "Ime korisnika: " << imeVlasnika << "   " << "Stanje racuna nakon isplate: " << stanje << "$" << endl;
+	}
+
+};
+
+int main() {
+	Racun o1 = { "Marcel",5000 };
+	Racun o2 = { "Laura",200 };
+	int broj = 100;
+
+	o1.ispisi();
+	
+	o1.isplata(broj);
+	o1.ispisisplate();
+
+	o2.ispisi();
+
+	o2.uplata(broj);
+	o2.ispisuplata();
+
+
+	return 0;
+}
