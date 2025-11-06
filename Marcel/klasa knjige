@@ -1,0 +1,68 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+
+class Knjiga {
+public:
+	string naslov;
+	string autor;
+
+	Knjiga() {
+		naslov = "";
+		autor = "";
+	}
+
+	Knjiga(string a, string b) {
+		naslov = a;
+		autor = b;
+	}
+
+	void ispis() const{
+		cout << naslov << " - " << autor << endl;
+	}
+};
+
+class Biblioteka {
+private:
+	Knjiga knjige[10];
+	int broj = 0;
+
+public:
+
+	void dodajknjigu(Knjiga k) {
+		if (broj < 10){
+			knjige[broj] = k;
+			broj++;
+		}
+		else {
+			cout << "Biblioteka je puna. " << endl;
+		}
+	}
+
+	void ispisisve() {
+		for (int i = 0; i < broj; i++) {
+			knjige[i].ispis();
+		}
+	}
+};
+
+
+int main() {
+	Biblioteka bib;
+
+	bib.dodajknjigu(Knjiga("Alisa  u zemlji cudesa.", "Duje Reic"));
+	bib.dodajknjigu(Knjiga("Cudoviste", "Laura Lagator"));
+	bib.dodajknjigu(Knjiga("Ljepotica i Zvjer", "Marcel Jevdic"));
+	bib.dodajknjigu(Knjiga("Snjeguljica i 1 patuljak", "Marko Barbir"));
+
+	cout << "Sve knjige u biblioteci: " << endl;
+	bib.ispisisve();
+
+
+
+	return 0;
+}
