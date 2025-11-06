@@ -1,0 +1,102 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+
+class Knjiga {
+public:
+	string naslov;
+	string autor;
+
+	Knjiga() {
+		naslov = "";
+		autor = "";
+	}
+
+	Knjiga(string a, string b) {
+		naslov = a;
+		autor = b;
+	}
+
+	void ispis(){
+		cout << naslov << " - " << autor << endl;
+	}
+};
+
+class Biblioteka {
+private:
+	Knjiga* knjige;
+	int kapacitet;
+	int broj;
+
+public:
+
+	Biblioteka() {
+		kapacitet = 10;
+		broj = 0;
+		knjige = new Knjiga[kapacitet];
+	}
+
+	Biblioteka( const Biblioteka& o ) {
+		cout << "Pozivanj copy konstruktora.... " << endl;
+		cout << "other.broj" << o.broj << endl;
+		kapacitet = o.kapacitet;
+		broj = o.broj;
+		knjige = new Knjiga[kapacitet];
+		for (int i = 0;i < broj;i++) {
+			knjige[i] = o.knjige[i];
+			cout << "Kopriram knjigu: " << knjige[i].naslov << endl;
+		}
+	};
+
+	~Biblioteka() {
+		delete[] knjige;
+	}
+
+
+	void dodajknjigu(Knjiga k) {
+		if (broj < kapacitet){
+			knjige[broj] = k;
+			broj++;
+		}
+		else {
+			cout << "Biblioteka je puna. " << endl;
+		}
+	}
+
+	void ispisisve() {
+		for (int i = 0; i < broj; i++) {
+			knjige[i].ispis();
+		}
+	}
+};
+
+
+int main() {
+	Biblioteka bib1;
+
+	bib1.dodajknjigu(Knjiga("Alisa  u zemlji cudesa.", "Duje Reic"));
+	bib1.dodajknjigu(Knjiga("Cudoviste", "Laura Lagator"));
+	bib1.dodajknjigu(Knjiga("Ljepotica i Zvjer", "Marcel Jevdic"));
+	bib1.dodajknjigu(Knjiga("Snjeguljica i 1 patuljak", "Marko Barbir"));
+
+	cout << "Sve knjige u biblioteci: " << endl;
+	cout << endl;
+	bib1.ispisisve();
+	cout << endl;
+	cout << "Kreiramo novu biblioteku. " << endl;
+	cout << endl;
+	Biblioteka bib2 = bib1; 
+	cout << endl;
+	cout << "ispis druge biblioteke: " << endl;
+	cout << endl;
+	bib2.ispisisve();
+
+
+
+
+	return 0;
+}
