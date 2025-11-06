@@ -1,0 +1,32 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+void funkcija(string& s) {
+	string novi;
+	string tmp;
+	size_t pozicija = 0;
+	size_t p = 0;
+	while(pozicija<s.size()){
+	p = s.find(' ', pozicija);
+	if (p != string::npos) {
+		tmp = s.substr(pozicija, p - pozicija);
+		novi.push_back(tmp[0]);
+		novi.push_back('.');
+		pozicija = p + 1;
+	}
+	else{
+		tmp = s.substr(pozicija,(s.size() - pozicija));
+		novi.push_back(tmp[0]);
+		novi.push_back('.');
+		pozicija = s.size();
+	}
+	}
+	cout <<novi;
+}
+int main() {
+	string inicijali = "John Johnny Depp";
+	funkcija(inicijali);
+
+	return 0;
+}
