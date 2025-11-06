@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+
+class Sensor {
+private:
+	string ime;
+	double minTmp;
+	double maxTmp;
+
+public:
+	Sensor(string n,double minT,double maxT) {
+		ime = n;
+		minTmp = minT;
+		maxTmp = maxT;
+	}
+
+	double mjerenje_temperatur() {
+		double r = (double)rand() / RAND_MAX;
+		double raspon = maxTmp - minTmp;
+		double tmp = minTmp + r * raspon;
+		return tmp;
+	}
+
+	void ispisi() {
+		cout << ime << endl;
+	}
+
+};
+
+int main() {
+	srand(time(0));
+
+	Sensor temp("Temperatura", -10.0, 35.0);
+
+	
+	cout << "Mjerenje senzora: ";
+	temp.ispisi();
+
+	for (int i = 0;i < 5; i++) {
+		double t = temp.mjerenje_temperatur();
+		cout << t << endl;
+	}
+
+
+
+	return 0;
+}
