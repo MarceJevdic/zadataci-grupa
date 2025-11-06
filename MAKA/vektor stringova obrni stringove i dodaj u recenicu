@@ -1,0 +1,24 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+void funkcija(vector <string>& s) {
+	string novi;
+
+	for (auto& it : s) {
+		reverse(it.begin(), it.end());
+		novi.append(it);
+		novi.push_back(' ');
+		
+	}
+	novi.push_back('.');
+	cout << novi;
+	
+	
+}
+int main() {
+	vector <string> v= {"John","johnny","depp"};
+	funkcija(v);
+
+	return 0;
+}
