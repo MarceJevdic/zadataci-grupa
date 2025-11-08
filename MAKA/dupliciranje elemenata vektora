@@ -1,0 +1,20 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+void funkcija(vector<int> &v) {
+	for (int i=v.size()-1; i>=0; i--) {
+		int n = v.at(i);
+		v.insert(v.begin() + i + 1, n);
+	}
+	for (int b : v) {
+		cout << b << " ";
+	}
+	
+}
+int main() {
+	vector<int> v = {1,2,3};
+	funkcija(v);
+
+	return 0;
+}
