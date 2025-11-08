@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void funkcija(string &s) {
+	vector<string > novi;
+	int p1 = 0;
+	while(p1<s.size()) {
+		int p2 = s.find(' ', p1);
+		if (p2 != string::npos) {
+			string tmp = s.substr(p1, p2 - p1);
+			novi.push_back(tmp);
+			p1 = p2 + 1;
+		}
+		else {
+			string tmp = s.substr(p1, s.size() - p1);
+			novi.push_back(tmp);
+			p1 = s.size();
+			
+			
+		}
+		
+	}
+	sort(novi.begin(), novi.end(), [](const string a, const string b) {
+		return (a.size() > b.size());
+		});
+	for (string b : novi) {
+		cout<<b << endl;
+	}
+
+	
+}
+int main() {
+	string s = "ja sam katarina parilo";
+	funkcija(s);
+
+	return 0;
+}
