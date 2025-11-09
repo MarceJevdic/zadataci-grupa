@@ -1,0 +1,43 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+class point {
+	double x;
+	double y;
+public:
+	point(double vrijednostx,double vrijednosty) {
+		x = vrijednostx;
+		y = vrijednosty;
+	};
+	double ishodiste()const {
+		return sqrt(x * x + y * y);
+	}
+	int compare(const point& druga) {
+		double t1 = ishodiste();
+		double t2 = druga.ishodiste();
+		if (t1 < t2) {
+			return -1;
+		}
+		else if (t1 > t2) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+};
+int main() {
+	vector<point> points = { point(3,4), point(4,5), point(2,3) };
+	point najbliza = points[0];
+	double minudaljenost = points[0].ishodiste();
+	for (const point& p : points) {
+		if (p.ishodiste() < minudaljenost) {
+			minudaljenost = p.ishodiste();
+			najbliza = p;
+		}
+	}
+	cout << "Najbliza tocka je udaljena: " << minudaljenost << endl;
+	return 0;
+}
