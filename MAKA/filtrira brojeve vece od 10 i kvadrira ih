@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void funkcija(vector<int>& v) {
+	vector <int> novi;
+	auto filter = [](int a) {
+		return a > 10;
+		};
+	for (auto it = v.begin(); it != v.end(); it++) {
+		if (filter(*it)) {
+			*it = (*it) * (*it);
+			novi.push_back(*it);
+		}
+	}
+	for (int b : novi) {
+		cout << b << " ";
+	}
+
+}
+
+int main() {
+	vector <int> v = { 1,12,43,4,56,9 };
+	funkcija(v);
+	return 0;
+}
