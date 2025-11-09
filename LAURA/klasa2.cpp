@@ -38,7 +38,7 @@ int main(){
         Student ("Luka",{2,3,4}),
         Student ("Laura",{1,1,1})
     };
-    
+    studenti[2].add_grade(5);
     int brojac=0;
     for(Student s : studenti){
         if(s.passed()){
