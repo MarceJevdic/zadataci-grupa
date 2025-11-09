@@ -1,0 +1,29 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+void funkcija(string& a,string& b){
+	size_t j = 0;
+	for (int i = 0; i < a.size();i++) {
+		if (a[i] == '*') {
+			if (j < b.size()) {
+				a.replace(i, 1, 1, b[j]);
+				++j;
+			}
+		}
+	}
+
+}
+
+int main() {
+	string a = "H*ll* W*rld";
+	string b = "eoo";
+
+	funkcija(a, b);
+	cout << a << endl;
+		
+
+	return 0;
+}
