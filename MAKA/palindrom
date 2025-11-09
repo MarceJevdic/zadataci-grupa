@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void funkcija(string &s) {
+	auto palindrom = [](string &s) {
+		return equal(s.begin(), s.begin() + s.size() / 2, s.rbegin());
+		};
+	if (palindrom(s)) {
+		cout << "palindrom" << endl;
+	}
+	else {
+		cout << "ne" << endl;
+	}
+	
+}
+int main() {
+	string s = "ana";
+	funkcija(s);
+
+	return 0;
+}
