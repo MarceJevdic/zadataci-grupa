@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+class temperatura {
+	double celzijus;
+public:
+	double tofarenheit() {
+		double F = (celzijus * (9.0 / 5)) + 32;
+		return F;
+	}
+	double tokelvin() {
+		double K = (celzijus + 273.15);
+		return K;
+	}
+	void setfromf(double F) {
+		celzijus = (F - 32) * (5.0 / 9);
+	}
+	void setfromk(double K) {
+		celzijus = (K - 273.15);
+	}
+	void ispis() {
+		double F=tofarenheit();
+		double K=tokelvin();
+		cout << "temperatura u celzijima: " << celzijus << "°C" << endl;
+		cout << "temperatura u farenheitima: " << F<< "F" << endl;
+		cout << "temperatura u kelvinima: " << K << "K" << endl;
+	}
+
+};
+
+int main() {
+	temperatura t1;
+	temperatura t2;
+	t1.setfromf(98.6);
+	t2.setfromk(273.15);
+	t1.ispis();
+	t2.ispis();
+	return 0;
+}
