@@ -1,0 +1,21 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void funkcija(vector<int>& v, int k) {
+	for (int i = 0; i < k; i++) {
+		int prvi = v.front();
+		v.erase(v.begin());
+		v.insert(v.end(), prvi);
+	}
+	for (int x : v) {
+		cout << x << " ";
+	}
+}
+int main() {
+	vector <int> v = { 1,2,3,4,5 };
+	int k = 2;
+	funkcija(v,k);
+	return 0;
+}
