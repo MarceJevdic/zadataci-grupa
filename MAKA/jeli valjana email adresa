@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+void funkcija(string &s) {
+	auto at = count(s.begin(), s.end(), '@');
+	if (at != 1) {
+		cout << "nema @" << endl;
+		return;
+	}
+	else {
+		int pozicija = s.find('@',0);
+		int brojslova = 0;
+		int brojac = 0;
+		int i = 0;
+		while(i<pozicija) {
+			if (isalpha(s.at(i))) {
+				brojslova += 1;
+			}
+			else if (isdigit(s.at(i))) {
+				brojac+=1;
+			}
+			i++;
+		}
+		if ((brojslova<1) || (brojac<1)) {
+			cout << "nema slova ili brojeva prije @"<<endl;
+			return;
+		}
+			if ((s[pozicija] == '@')&&(s[pozicija + 1] == '.')) {
+				cout << "poslje @ je odma tocka"<<endl;
+				return;
+			}
+			else {
+				int pozicijatocke = s.find('.', pozicija);
+				if (pozicijatocke == string::npos) {
+					cout << "nema tocke nakon @ uopce" << endl;
+					return;
+				}
+				int brojprijetocke= count_if(s.begin() + pozicija+1, s.begin() + pozicijatocke, [] (char c) {
+					return (isalpha(c) || (isdigit(c)));
+					});
+				int brojposljetocke = count_if(s.begin() + pozicijatocke+1, s.begin() + s.size(), [](char c) {
+					return (isalpha(c) || (isdigit(c)));
+					});
+				if ((brojprijetocke<=1) || (brojposljetocke<=1)) {
+					cout << "nema slova ili brojeva prije ili poslje tocke"<<endl;
+					return;
+				}
+			}
+		cout << "valid email" << endl;
+	}
+}
+int main() {
+	string email= "m1@gmail.com";
+	funkcija(email);
+	return 0;
+}
