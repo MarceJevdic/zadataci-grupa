@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+bool prosti_brojevi(int b) {
+	if (b < 2) {
+		return false;
+	}
+
+	for (int i = 2;i < b; i++) {
+		if (b % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+void funkcija(vector<int>& a) {
+
+	a.erase(remove_if(a.begin(), a.end(), prosti_brojevi),a.end());
+
+	for (int i : a) {
+		cout << i << " ";
+	}
+
+}
+
+int main() {
+	vector<int> a = { 1,2,3,4,5,6,7 };
+	funkcija(a);
+
+	return 0;
+}
