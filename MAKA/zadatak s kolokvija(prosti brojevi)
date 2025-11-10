@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+bool jeprost(int& broj) {
+	int brojdjelitelja = 0;
+	if (broj < 2) {
+		return false;
+	}
+	for (int j = 1; j <= broj; j++) {
+		if (broj % j == 0) {
+			brojdjelitelja += 1;
+		}
+	}
+	return brojdjelitelja == 2;
+	
+}
+void funkcija(vector<int> &v) {
+	int n = 2;
+	int k = 2;
+	vector<int> novi(v.size());
+	vector<int> novi1;
+	/*transform(v.begin(), v.end(), novi.begin(), [&](int broj) {
+		return broj + n;
+			});
+	auto it=copy_if(v.begin(), v.end(),back_inserter(novi1), [&](int broj) {
+		return(broj > k);
+		});
+	auto it1=find_if(v.begin(), v.end(), [&](int broj) {
+		if (broj % k == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		});
+	if (it1 == v.end()) {
+		cout << -1;
+	}
+	else{
+		cout << *it1;
+	}*/
+	
+	auto it4=remove_if(v.begin(), v.end(), [&](int broj) {
+		return jeprost(broj);
+		});
+	v.erase(it4, v.end());
+	
+}
+int main() {
+	vector <int> v = { 1,2,4,5,3 };
+	funkcija(v);
+	return 0;
+}
