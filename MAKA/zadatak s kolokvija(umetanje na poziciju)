@@ -1,0 +1,20 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+void funkcija(string& s,string &a) {
+	auto it = find_if(s.begin(), s.end(), [](char c) {
+		return (c == '*');
+		});
+	s.erase(it);
+	s.insert(it, a.begin(),a.end());
+	cout << s;
+}
+int main(){
+	string s = "Ovo je * primjer recenice";
+	string a = "novi";
+	funkcija(s,a);
+	return 0;
+}
