@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+
+void funkcija(vector <int> &v,int a,int b) {
+	auto it=remove_if(v.begin(), v.end(), [&](int broj) {
+		return broj == a;
+		});
+	v.erase(it, v.end());
+	auto it1 = find(v.begin(), v.end(), b);
+	v.insert(it1 + 1, 0);
+	for (int x : v) {
+		cout << x << " ";
+	}
+}
+int main(){
+	vector<int> v = { 1,2,3,4,5 };
+	int a = 2;
+	int b = 3;
+	funkcija(v, a, b);
+	return 0;
+}
