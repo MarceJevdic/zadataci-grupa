@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+
+void funkcija(string &s) {
+	string s1;
+	string s2;
+	for (auto it = s.rbegin(); it != s.rend(); it++) {
+		s1.push_back(*it);
+	}
+	int p1 = 0;
+	while(p1!=s1.size()) {
+		int p2=s1.find(' ', p1);
+		if (p2 != string::npos) {
+			string tmp = s1.substr(p1, p2 - p1);
+			sort(tmp.begin(), tmp.end());
+			p1 = p2 + 1;
+			p2 = p1 + 1;
+			s2.append(tmp);
+			s2.push_back(' ');
+			
+		}
+		else {
+			string tmp = s1.substr(p1,s1.size() - p1);
+			sort(tmp.begin(), tmp.end());
+			p1 = s1.size();
+			s2.append(tmp);
+			s2.push_back(' ');
+		}
+	}
+	cout << s2;
+}
+int main(){
+	string s = "hello world";
+	funkcija(s);
+	return 0;
+}
