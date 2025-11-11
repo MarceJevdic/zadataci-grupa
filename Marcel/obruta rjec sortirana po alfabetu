@@ -1,27 +1,39 @@
 #include <iostream>
 #include <string>
+#include<vector>
 #include <algorithm>
 using namespace std;
 
 void funkcija(string& rjec) {
-    auto it = find(rjec.begin(), rjec.end(), ' ');
-    if (it != rjec.end()) {
-        sort(rjec.begin(), it);
-    }
+    auto pocetak = rjec.begin();
+    vector<string> rijeci;
+    while (pocetak != rjec.end()) {
+        auto it = find(pocetak, rjec.end(), ' ');
 
-    for (auto it1 = rjec.rbegin(); it1 != rjec.rend(); it1++) {
-        if (*it1 == ' ') {
-            cout << ' ';
+
+        string rijec(pocetak, it);
+        sort(rijec.begin(), rijec.end());
+        rijeci.push_back(rijec);
+        if (it == rjec.end()) {
+            break;
         }
-        else {
-            cout << *it1;
-        }
+        pocetak = it +1;
     }
+    
+
+
+    reverse(rijeci.begin(), rijeci.end());
+
+    for (size_t i = 0; i < rijeci.size(); ++i) {
+        cout << rijeci[i];
+        if (i != rijeci.size() - 1) cout << ' ';
+    }
+    cout << endl;
 
 }
 
 int main() {
-    string rjec = "hello world";
+    string rjec = "better late than never";
     funkcija(rjec);
     return 0;
 }
