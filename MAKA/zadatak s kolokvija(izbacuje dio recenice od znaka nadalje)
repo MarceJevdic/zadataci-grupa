@@ -1,0 +1,19 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+
+void funkcija(string &s ) {
+	
+	auto it=find(s.begin(), s.end(), '#');
+	s.erase(it, s.end());
+	cout << s;
+}
+int main(){
+	string s = "ovo je test #djela recenice.";
+	funkcija(s);
+
+	return 0;
+}
