@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+#include <random>
+using namespace std;
+
+void funkcija(int num,int len,int k) {
+	if (len <= 0) {
+		return;
+	}
+	vector<int> v;
+	auto visekratnik = [&](int broj) {
+		return ((broj % num == 0) && (broj % k != 0));
+		};
+	int i = 0;
+	while(i<=len) {
+		int x = rand()%1000;
+		if (visekratnik(x)) {
+			v.push_back(x);
+			i++;
+		}
+	}
+	sort(v.begin(), v.end());
+	for (int x : v) {
+		cout << x << " ";
+	}
+
+
+}
+int main(){
+	int len, num, k;
+	cin >> len;
+	cin >> num;
+	cin >> k;
+	cin.ignore();
+	funkcija(num,len,k);
+	return 0;
+}
