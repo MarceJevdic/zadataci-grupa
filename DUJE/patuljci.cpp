@@ -73,8 +73,11 @@ int main() {
         arr.get_vector()[0] = nova;
     }
     arr.minify();
-    cout<<"najsporija brzina nakon utrke: "<<arr.front();
-
+    cout<<"najsporija brzina na kraju utrke: "<<arr.front()<<endl;
+    cout<<"Sve brzine nakon utrke: "<<endl;
+    for(int i = 0; i < arr.size(); i++){
+        cout << arr.get_vector()[i] << " ";
+    }
     return 0;
 }
 
