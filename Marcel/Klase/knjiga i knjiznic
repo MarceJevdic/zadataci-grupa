@@ -1,0 +1,52 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+class Knjiga {
+private:
+	string ime;
+public:
+	Knjiga(string a) {
+		ime = a;
+	}
+
+	string funkcija()const {
+		return ime;
+	}
+
+};
+
+class Knjiznica {
+private:
+	vector<Knjiga> knjige;
+	string ime;
+public:
+	
+
+	void dodajknjigu(const string& imeknjiga) {
+		knjige.push_back(imeknjiga);
+	}
+
+	void ispis() {
+		cout << "Knjiga sadrzi:  " << endl;
+		for (auto a : knjige) {
+			cout << a.funkcija() << " ";
+		}
+		cout << endl;
+	}
+
+};
+
+int main() {
+	Knjiznica k;
+
+	k.dodajknjigu("SUMA STRIBOROVA");
+	k.dodajknjigu("Patuljak");
+
+	
+	k.ispis();
+
+	return 0;
+}
