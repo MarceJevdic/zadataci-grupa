@@ -72,6 +72,8 @@ int main() {
         cin >> nova;
         arr.get_vector()[0] = nova;
     }
+    arr.minify();
+    cout<<"najsporija brzina nakon utrke: "<<arr.front();
 
     return 0;
 }
