@@ -1,0 +1,82 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+class Predmet {
+private:
+	string imePredmeta;
+public:
+	Predmet(string a) {
+		imePredmeta = a;
+	}
+
+	string naziv() const {
+		return imePredmeta;
+	}
+};
+
+class Student {
+private:
+	string ime;
+	vector<string> predmeti;
+	vector<int> ocjene;
+public:
+	Student(string a) {
+		ime = a;
+	}
+
+	void dodajOcjene(const string& predmet, int ocjena){
+		predmeti.push_back(predmet);
+		ocjene.push_back(ocjena);
+	}
+
+	void ispis() {
+		cout << "Student: " << ime << endl;
+		for (int i = 0; i < predmeti.size();i++) {
+			cout << " " << predmeti[i] << ": " << ocjene[i] << endl;
+		}
+		cout << endl;
+	}
+};
+
+
+int main() {
+	vector<Predmet> predmeti;
+	vector<Student> studenti;
+
+	predmeti.push_back(Predmet("Matematika"));
+	predmeti.push_back(Predmet("Hrvatski"));
+	predmeti.push_back(Predmet("Engleski"));
+
+	studenti.push_back(Student("Marcel"));
+	studenti.push_back(Student("Marko"));
+	studenti.push_back(Student("Laura"));
+	studenti.push_back(Student("Kolega"));
+
+	studenti[0].dodajOcjene(predmeti[0].naziv(), 5);
+	studenti[0].dodajOcjene(predmeti[1].naziv(), 5);
+	studenti[0].dodajOcjene(predmeti[2].naziv(), 5);
+
+
+	studenti[1].dodajOcjene(predmeti[0].naziv(), 4);
+	studenti[1].dodajOcjene(predmeti[1].naziv(), 4);
+	studenti[1].dodajOcjene(predmeti[2].naziv(), 4);
+
+	studenti[2].dodajOcjene(predmeti[0].naziv(), 3);
+	studenti[2].dodajOcjene(predmeti[1].naziv(), 3);
+	studenti[2].dodajOcjene(predmeti[2].naziv(), 3);
+
+	studenti[3].dodajOcjene(predmeti[0].naziv(), 1);
+	studenti[3].dodajOcjene(predmeti[1].naziv(), 1);
+	studenti[3].dodajOcjene(predmeti[2].naziv(), 1);
+
+	for (auto a : studenti) {
+		a.ispis();
+	}
+
+
+
+	return 0;
+}
