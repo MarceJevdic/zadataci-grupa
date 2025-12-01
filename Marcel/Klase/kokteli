@@ -1,0 +1,114 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+using namespace std;
+
+class Koktel {
+private:
+	string koktel;
+	int volumen;
+	double postotak_alkohola;
+	double cijena;
+public:
+	void set_data(const string& a, int b, double c, double d) {
+		koktel = a;
+		volumen = b;
+		postotak_alkohola = c;
+		cijena = d;
+	}
+	
+	bool jeli_alkoholno_pice() {
+		if (postotak_alkohola > 0.0) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	double alkohol() {
+		return postotak_alkohola;
+	}
+
+	double price() {
+		if (volumen != 0) {
+			cijena = cijena / volumen;
+		}
+		return cijena;
+	}
+
+
+	void print_info() {
+		cout << koktel << "-" << volumen << "ml, " << postotak_alkohola << "% alc " << cijena << "EUR " << "(" << price() << " EUR/ml)" << endl;
+	}
+
+};
+
+
+int main() {
+	vector<Koktel> kokteli(6);
+	
+	kokteli[0].set_data("Mojito", 300, 10.5, 8.50);
+	kokteli[1].set_data("Pina Colada", 350, 12.0, 9.80);
+	kokteli[2].set_data("Shirley Temple", 250, 0.0, 6.50);
+	kokteli[3].set_data("Virgin Mojito", 300, 0.0, 7.20);
+	kokteli[4].set_data("Margarita", 280, 15.0, 10.20);
+	kokteli[5].set_data("Long Island Iced Tea", 400, 22.0, 12.50);
+
+	cout << " === SVI KOKTELI ===  " << endl;
+	for (auto a : kokteli) {
+		a.print_info();
+	}
+	
+	cout << endl;
+
+	cout << "=== BEZ ALKOHOLNI KOKTELI ===" << endl;
+	for (auto a : kokteli) {
+		if (!a.jeli_alkoholno_pice()) {
+			a.print_info();
+		}
+	}
+
+	cout << endl;
+
+	auto najeftiniji = min_element(kokteli.begin(), kokteli.end(), [](Koktel a, Koktel b) {
+		return a.price() < b.price();
+		});
+
+	cout << "=== NAJEFTINIJI KOKTEL PO MILILITRU ===" << endl;
+	najeftiniji->print_info();
+
+	cout << endl;
+
+	auto najskuplji = max_element(kokteli.begin(), kokteli.end(), [](Koktel a,Koktel b) {
+		return a.price() < b.price();
+		});
+
+	cout << "=== NAJSKUPLJI KOKTEL PO MILILITRU ===" << endl;
+	najskuplji->print_info();
+
+	cout << endl;
+
+	cout << "=== KOKTELI SORTIRANI PO POSTOTKU ALKOHOLA ===" << endl;
+	sort(kokteli.begin(), kokteli.end(), [](Koktel a,Koktel b) {
+		return a.alkohol() < b.alkohol();
+		});
+	for (auto a : kokteli) {
+		a.print_info();
+	}
+
+	cout << endl;
+
+	cout << "=== KOKTELI SORTIRANI PO CIJENI PO MILILITRU===" << endl;
+	sort(kokteli.begin(), kokteli.end(), [](Koktel a,Koktel b) {
+		return a.price() > b.price();
+		});
+	for (auto a : kokteli) {
+		a.print_info();
+	}
+
+
+
+	return 0;
+}
