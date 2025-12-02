@@ -1,0 +1,94 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<vector>
+#include<cctype>
+using namespace std;
+
+class Ocjena {
+private:
+    string predmet;
+    int ocjena;
+public:
+    Ocjena(string b,int a) {
+        predmet = b;
+        ocjena = a;
+    }
+
+    int getocjena() {
+        return ocjena;
+    }
+    
+    string getpredmet() {
+        return predmet;
+    }
+
+};
+class Ucenik {
+private:
+    string ime;
+    vector<Ocjena>ocjene;
+public:
+    Ucenik(string a) {
+        ime = a;
+    }
+
+    void dodajOcjenu(const Ocjena& ocjena) {
+        ocjene.push_back(ocjena);
+    }
+
+    void ispis() {
+        cout << "Ime ucenika: " << ime << endl;
+        for (auto a : ocjene) {
+              
+            cout << "Predmet: " << a.getpredmet() << " ";
+            cout << "Ocjena: " << a.getocjena() << endl;;
+        }
+        cout << endl;
+    }
+
+    double prosjekOcjen() {
+        if (ocjene.empty()) {
+            return 0.0;
+        }
+        double zbroj = 0;
+        for (auto a : ocjene) {
+            zbroj += a.getocjena();
+        }
+        return zbroj / ocjene.size();
+    }
+
+    void ispisiIznadProsjeka() {
+        double b = prosjekOcjen();
+        for (auto a : ocjene) {
+            if (a.getocjena() > b) {
+                cout << "Predmet: " << a.getpredmet() << " ";
+                cout << "Ocjena: " << a.getocjena() << endl;;
+            }
+        }
+
+    }
+
+
+};
+
+
+int main() {
+    Ocjena o1("Matematika", 5);
+    Ocjena o2("Engleski", 4);
+    Ocjena o3("Fizika", 2);
+    Ocjena o4("Povijest", 5);
+
+    Ucenik u1("Marko");
+
+    u1.dodajOcjenu(o1);
+    u1.dodajOcjenu(o2);
+    u1.dodajOcjenu(o3);
+    u1.dodajOcjenu(o4);
+
+    u1.ispis();
+    cout << "ispis ocjena iznad prosjeka" << endl;
+    u1.ispisiIznadProsjeka(); // ispisuje ocjene koje su iznad prosjeka njegovih ocjena
+
+    return 0;
+}
