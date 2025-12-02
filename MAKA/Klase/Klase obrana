@@ -1,0 +1,57 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+using namespace std;
+class knjiga {
+	string ime;
+	string autor;
+	int godina;
+public:
+	knjiga(string s1, string s2, int g) {
+		ime = s1;
+		godina = g;
+		autor = s2;
+	}
+	string getime() const {
+		return ime;
+	}
+	string getautor() const {
+		return autor;
+	}
+	int getgodina()const {
+		return godina;
+	}
+	void ispis()const {
+		cout << ime << "-" << autor << "(" << godina << ")" << endl;
+	}
+};
+class knjiznica {
+	string imek;
+	vector<knjiga> knjige;
+public:
+	knjiznica(string s3) {
+		imek = s3;
+	}
+	void dodajknjigu(const knjiga &k) {
+		knjige.push_back(k);
+	}
+	void ispisknjiznice() {
+		cout << imek << endl;
+		for (const knjiga &k : knjige) {
+			cout << k.getime() << "-" << k.getautor() << "(" << k.getgodina() << ")" << endl;
+		}
+	}
+};
+
+int main() {
+	knjiga k1("Harry Potter","J.K. Rowling",1998);
+	knjiga k2("Hobbit", "J.R.R Toliken", 1973);
+	knjiznica moja("Gradska knjiznica");
+	moja.dodajknjigu(k1);
+	moja.dodajknjigu(k2);
+
+	moja.ispisknjiznice();
+
+	return 0;
+}
