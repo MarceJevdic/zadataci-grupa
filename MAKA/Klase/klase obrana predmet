@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+using namespace std;
+class ucenik {
+	string ime;
+	double ocjena;
+public:
+	ucenik(const string& s, const double& x) {
+		ime = s;
+		ocjena = x;
+	}
+	ucenik(const ucenik& drugi) {
+		ime = drugi.ime;
+		ocjena = drugi.ocjena;
+	}
+	
+	string getime()const {
+		return ime;
+	}
+	double getocjena()const {
+		return ocjena;
+	}
+	void ispisocjena() {
+		cout << "ime: " << ime << ", " << "ocjena: " << ocjena << endl;
+	}
+};
+class predmet {
+	string imepred;
+	vector<ucenik> ispit;
+public:
+	predmet(const string& s1) {
+		imepred = s1;
+	}
+	void dodajstudenta( const ucenik &y) {
+		ispit.push_back(y);
+	}
+	void ispis() {
+		cout << "rezultati ispita: " << endl;
+		for (const ucenik &u : ispit) {
+			if (u.getocjena() > 3) {
+				cout << u.getime() << " " << u.getocjena() << endl;
+			}
+		}
+	}
+};
+int main() {
+	ucenik u1("Marko", 4);
+	ucenik u2("Marcel", 3);
+	ucenik u3("Laura", 5);
+	predmet a("PMA");
+	a.dodajstudenta(u1);
+	a.dodajstudenta(u2);
+	a.dodajstudenta(u3);
+	ucenik u4 = u3;
+	a.dodajstudenta(u4);
+	a.ispis();
+	return 0;
+}
