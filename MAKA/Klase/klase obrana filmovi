@@ -1,0 +1,64 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+using namespace std;
+
+class film {
+	string ime;
+	string zanr;
+	int godina;
+public:
+	film(const string& s, const string& s1, int g) {
+		ime = s;
+		zanr = s1;
+		godina = g;
+	}
+	string getime()const {
+		return ime;
+	}
+	string getzanr()const {
+		return zanr;
+	}
+	int getgodina()const {
+		return godina;
+	}
+	void ispisfilma() {
+		
+		cout << ime << "," << zanr << "(" << godina << ")" << endl;
+	}
+};
+class filmoteka {
+	string naziv;
+	vector<film> filmovi;
+public:
+	filmoteka(const string& s3) {
+		naziv = s3;
+	}
+	void dodajfilm(film f) {
+		filmovi.push_back(f);
+	}
+	void ispisfilmoteke() {
+		cout << naziv << endl;
+		for (film f : filmovi) {
+			if (f.getgodina()<2010) {
+				cout << f.getime() << "," << f.getzanr() << "(" << f.getgodina() << ")" << endl;
+			}
+		}
+	}
+
+};
+int main() {
+	film f1("Elf", "Bozicni film", 2004);
+	film f2("Gospodar prstenova", "Fantazija", 2001);
+	film f3("Hobbit", "Fantazija", 20014);
+
+	filmoteka fm("Moja filmoteka");
+	fm.dodajfilm(f1);
+	fm.dodajfilm(f2);
+	fm.dodajfilm(f3);
+	fm.ispisfilmoteke();
+
+
+	return 0;
+}
