@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+class zaposlenik {
+	string imeprez;
+	double placa;
+public:
+	zaposlenik(const string& s, const double x) {
+		imeprez = s;
+		placa = x;
+	}
+	string getime()const {
+		return imeprez;
+	}
+	double getplaca()const {
+		return placa;
+	}
+	void ispis() {
+		cout << imeprez << "-" << placa <<"$" << endl;
+	}
+};
+class firma {
+	string ime;
+	vector<zaposlenik> zaposlenici;
+public:
+	firma(const string& s1) {
+		ime = s1;
+	}
+	void dodajzaposlenika(zaposlenik z){
+		zaposlenici.push_back(z);
+	}
+	void ispis() {
+		cout << ime << endl;
+		for (zaposlenik z : zaposlenici) {
+			if (z.getplaca() > 1500) {
+				cout << z.getime() << "-" << z.getplaca() << endl;
+			}
+		}
+	}
+};
+int main() {
+	zaposlenik z1("katarina parilo", 3440.46);
+	zaposlenik z2("marko barbir", 1340.60);
+	firma moja("Firmetina");
+	moja.dodajzaposlenika(z1);
+	moja.dodajzaposlenika(z2);
+	moja.ispis();
+	return 0;
+}
