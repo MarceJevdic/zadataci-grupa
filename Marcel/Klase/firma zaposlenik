@@ -1,0 +1,73 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+using namespace std;
+
+class Zaposlenik {
+private:
+	string name;
+	double placa;
+public:
+	Zaposlenik(string a, double b) {
+		name = a;
+		placa = b;
+	}
+
+	string getime() const{
+		return name;
+	}
+	double getplaca() const{
+		return placa;
+	}
+/*
+	void ispisi() {
+		cout << "Ime zaposlenika: " << name << endl;
+		cout << "Placa zaposlenika: " << placa << endl;
+	}
+*/
+};
+
+class Firma {
+private:
+	string naziv;
+	vector <Zaposlenik> zaposlenici;
+	double granica;
+public:
+	Firma(string a) {
+		naziv = a;
+		granica = 0;
+	}
+
+	void setgranica(double g) {
+		granica = g;
+	}
+
+	void dodaj_zaposlenika(const Zaposlenik& zaposlenik) {
+		zaposlenici.push_back(zaposlenik);
+	}
+
+	void ispis() {
+		cout << "Naziv firme: " << naziv << endl;
+		for (auto a : zaposlenici) {
+			if (a.getplaca() >= granica) {
+				cout << "Ime zaposlenika: " << a.getime() << endl;
+				cout << "Placa : " << a.getplaca() << endl;
+			}
+		}
+	}
+};
+
+
+int main() {
+	Firma f("Tommy");
+	f.setgranica(1000);
+
+	f.dodaj_zaposlenika(Zaposlenik("Marcel",5000));
+	f.dodaj_zaposlenika(Zaposlenik("Maka", 2000));
+
+	f.ispis();
+
+
+	return 0;
+}
