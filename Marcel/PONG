@@ -1,210 +1,312 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <cmath>
 
 using namespace std;
 using namespace sf;
 
+/* ================= BASE ================= */
 class GameObject {
-public: 
-    virtual void draw(RenderWindow& window) = 0;
+public:
     virtual void update() = 0;
+    virtual void draw(RenderWindow& window) = 0;
+    virtual FloatRect getBounds() const = 0;
     virtual ~GameObject() {}
-
 };
 
+/* ================= PADDLE ================= */
 class Paddle : public GameObject {
 public:
     RectangleShape shape;
-    float speed = 5.f;
+    float speed = 7.f;
 
-    Paddle(float x, float y) {
-        shape.setSize(Vector2f(20.f, 100.f));
+    Paddle(float x) {
+        shape.setSize({ 10.f, 100.f });
+        shape.setPosition(x, 250.f);
         shape.setFillColor(Color::White);
-        shape.setPosition(x, y);
     }
 
-    void moveUp() {
-        shape.move(0, -speed);
-    }
-
-    void moveDown() {
-        shape.move(0, speed);
+    void move(float dy) {
+        if (shape.getPosition().y + dy >= 0 &&
+            shape.getPosition().y + dy <= 600 - shape.getSize().y)
+            shape.move(0, dy);
     }
 
     void draw(RenderWindow& window) override {
         window.draw(shape);
     }
 
-    void update() override{ }
-
+    FloatRect getBounds() const override {
+        return shape.getGlobalBounds();
+    }
 };
 
+/* ================= PLAYER ================= */
+class PlayerPaddle : public Paddle {
+    Keyboard::Key up, down;
+public:
+    PlayerPaddle(float x, Keyboard::Key u, Keyboard::Key d)
+        : Paddle(x), up(u), down(d) {
+    }
+
+    void update() override {
+        if (Keyboard::isKeyPressed(up)) move(-speed);
+        if (Keyboard::isKeyPressed(down)) move(speed);
+    }
+};
+
+/* ================= BOT ================= */
+class BotPaddle : public Paddle {
+    const CircleShape* ball;
+public:
+    BotPaddle(float x, const CircleShape* b)
+        : Paddle(x), ball(b) {
+    }
+
+    void update() override {
+        float ballCenter = ball->getPosition().y + ball->getRadius();
+        float paddleCenter = shape.getPosition().y + shape.getSize().y / 2;
+
+        if (ballCenter < paddleCenter) move(-speed);
+        else move(speed);
+    }
+};
+
+/* ================= BALL ================= */
 class Ball : public GameObject {
 public:
     CircleShape shape;
     Vector2f velocity;
 
-    Ball(float x, float y) {
-        shape.setRadius(10.f);
+    Ball() {
+        shape.setRadius(8.f);
         shape.setFillColor(Color::White);
-        shape.setPosition(x, y);
-        velocity = Vector2f(4.f, 4.f);
+        reset();
+    }
+
+    void reset() {
+        shape.setPosition(400, 300);
+        velocity.x = (rand() % 2 ? 1 : -1) * 5.f;
+        velocity.y = (rand() % 2 ? 1 : -1) * 5.f;
+    }
+
+    void update() override {
+        shape.move(velocity);
+
+        if (shape.getPosition().y <= 0 ||
+            shape.getPosition().y >= 600 - shape.getRadius() * 2)
+            velocity.y *= -1;
     }
 
     void draw(RenderWindow& window) override {
         window.draw(shape);
     }
 
-    void update() override {
-        shape.move(velocity);
-    }
-
-    void checkCollision(Paddle& p1, Paddle& p2) {
-        if (shape.getGlobalBounds().intersects(p1.shape.getGlobalBounds()) ||
-            shape.getGlobalBounds().intersects(p2.shape.getGlobalBounds())) {
-            velocity.x = -velocity.x;
-        }
-        if (shape.getPosition().y < 0 || shape.getPosition().y > 500) {
-            velocity.y = -velocity.y;
-        }
-    }
-    void reset() {
-        shape.setPosition(395, 295);
+    FloatRect getBounds() const override {
+        return shape.getGlobalBounds();
     }
 };
 
+/* ================= POWERUPS ================= */
+class PowerUp {
+public:
+    CircleShape shape;
+    string type; // "SpeedUp", "BigPaddle", "SmallPaddle"
+    Clock lifeTimer;
+    float pulse = 0.f;
 
+    PowerUp(string t, Vector2f pos) {
+        type = t;
+        shape.setRadius(12.f);
+        shape.setOrigin(12.f, 12.f);
+        shape.setPosition(pos);
+        shape.setOutlineThickness(2.f);
+        shape.setOutlineColor(Color::White);
+
+        if (type == "SpeedUp") shape.setFillColor(Color(0, 220, 120));
+        if (type == "BigPaddle") shape.setFillColor(Color(220, 70, 70));
+        if (type == "SmallPaddle") shape.setFillColor(Color(240, 200, 0));
+
+        lifeTimer.restart();
+    }
+
+    void updateVisual() {
+        pulse += 0.08f;
+        float scale = 1.f + sin(pulse) * 0.1f;
+        shape.setScale(scale, scale);
+    }
+
+    bool expired() const {
+        return lifeTimer.getElapsedTime().asSeconds() > 30.f;
+    }
+
+    FloatRect getBounds() const {
+        return shape.getGlobalBounds();
+    }
+
+    void draw(RenderWindow& window) {
+        window.draw(shape);
+    }
+};
+
+/* ================= MENU ================= */
 int showMenu(RenderWindow& window, Font& font) {
     vector<string> options = { "Player vs Player", "Player vs Bot" };
-    int choice = -1;
-
-    vector<Text> optionTexts;
-    int yOffset = 250;
-    for (auto& opt : options) {
-        Text t(opt, font, 40);
-        t.setFillColor(Color::White);
-        FloatRect textRect = t.getLocalBounds();
-        t.setOrigin(textRect.left + textRect.width / 2.0f,
-            textRect.top + textRect.height / 2.0f);
-        t.setPosition(400, static_cast<float>(yOffset));
-        optionTexts.push_back(t);
-        yOffset += 100;
-    }
+    vector<Text> texts;
 
     Text title("PONG", font, 70);
     title.setFillColor(Color::Cyan);
-    FloatRect titleRect = title.getLocalBounds();
-    title.setOrigin(titleRect.left + titleRect.width / 2.0f,
-        titleRect.top + titleRect.height / 2.0f);
-    title.setPosition(400, 100);
+    title.setPosition(300, 80);
 
-    while (window.isOpen() && choice == -1) {
-        Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed)
-                window.close();
-            if (event.type == Event::MouseButtonPressed) {
-                if (event.mouseButton.button == Mouse::Left) {
-                    Vector2i mousePos = Mouse::getPosition(window);
-                    for (size_t i = 0; i < optionTexts.size(); ++i) {
-                        if (optionTexts[i].getGlobalBounds().contains(static_cast<float>(mousePos.x),static_cast<float>(mousePos.y))){
-                            choice = static_cast<int>(i) + 1;
-                        }
-                    }
-                }
-            }
-        }
-
-        Vector2i mousePos = Mouse::getPosition(window);
-        for (size_t i = 0; i < optionTexts.size(); ++i) {
-            if (optionTexts[i].getGlobalBounds().contains(static_cast<float>(mousePos.x),
-                static_cast<float>(mousePos.y)))
-                optionTexts[i].setFillColor(Color::Green);
-            else
-                optionTexts[i].setFillColor(Color::White);
-        }
-
-        window.clear(Color::Black);
-        window.draw(title);
-        for (auto& t : optionTexts)
-            window.draw(t);
-        window.display();
+    for (int i = 0; i < options.size(); i++) {
+        Text t(options[i], font, 40);
+        t.setPosition(250, 250 + i * 100);
+        texts.push_back(t);
     }
-
-    return choice;
-}
-
-void startGame(int mode) {
-    RenderWindow window(VideoMode(800, 600), "Pong game");
-    window.setFramerateLimit(60);
-
-    Paddle player1(50, 250);
-    Paddle player2(730, 250);
-    Ball ball(395, 295);
 
     while (window.isOpen()) {
-        Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) {
-                window.close();
-            }
+        Event e;
+        while (window.pollEvent(e)) {
+            if (e.type == Event::Closed) window.close();
+            if (e.type == Event::MouseButtonPressed)
+                for (int i = 0; i < texts.size(); i++)
+                    if (texts[i].getGlobalBounds().contains(
+                        Mouse::getPosition(window).x,
+                        Mouse::getPosition(window).y))
+                        return i + 1;
         }
-            if (Keyboard::isKeyPressed(Keyboard::W)) {
-                player1.moveUp();
-            }
-            if (Keyboard::isKeyPressed(Keyboard::S)) {
-                player1.moveDown();
-            }
 
-
-            if (mode == 1) {
-                if (Keyboard::isKeyPressed(Keyboard::Up)) {
-                    player2.moveUp();
-                }
-                if (Keyboard::isKeyPressed(Keyboard::Down)) {
-                    player2.moveDown();
-                }
-            }
-            else {
-                if (ball.shape.getPosition().y + ball.shape.getRadius() / 2 < player2.shape.getPosition().y) {
-                    player2.moveUp();
-                }
-                else if (ball.shape.getPosition().y + ball.shape.getRadius() / 2 > player2.shape.getPosition().y + player2.shape.getSize().y) {
-                    player2.moveDown();
-                }
-            }
-
-            ball.update();
-            ball.checkCollision(player1, player2);
-
-            window.clear();
-            player1.draw(window);
-            player2.draw(window);
-            ball.draw(window);
-            window.display();
-        
+        window.clear();
+        window.draw(title);
+        for (auto& t : texts) window.draw(t);
+        window.display();
     }
+    return -1;
 }
 
-int main() {
-    RenderWindow menuWindow(VideoMode(800, 600), "Pong Startup Menu");
-    menuWindow.setFramerateLimit(60);
+/* ================= GAME ================= */
+void startGame(int mode) {
+    RenderWindow window(VideoMode(800, 600), "Pong");
+    window.setFramerateLimit(60);
 
     Font font;
-    if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
-        cout << "Ne mogu ucitati font!\n";
-        return -1;
+    font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf");
+
+    Ball ball;
+    PlayerPaddle left(30, Keyboard::W, Keyboard::S);
+    PlayerPaddle rightPlayer(760, Keyboard::Up, Keyboard::Down);
+    BotPaddle bot(760, &ball.shape);
+
+    Paddle* right = (mode == 1) ? (Paddle*)&rightPlayer : (Paddle*)&bot;
+
+    vector<PowerUp> powerUps;
+    vector<string> effects;
+    Clock spawnClock;
+    Clock effectTimer;
+
+    int scoreL = 0, scoreR = 0;
+    Text score("", font, 40);
+    score.setPosition(360, 20);
+
+    while (window.isOpen()) {
+        Event e;
+        while (window.pollEvent(e))
+            if (e.type == Event::Closed) window.close();
+
+        // spawn powerups
+        if (spawnClock.getElapsedTime().asSeconds() > 3) {
+            vector<string> types = { "SpeedUp", "BigPaddle", "SmallPaddle" };
+            string t = types[rand() % 3];
+            powerUps.push_back(PowerUp(t, Vector2f(rand() % 600 + 100, rand() % 400 + 100)));
+            spawnClock.restart();
+        }
+
+        left.update();
+        right->update();
+        ball.update();
+
+        // paddle collision
+        if (ball.getBounds().intersects(left.getBounds()))
+            ball.velocity.x *= -1;
+        if (ball.getBounds().intersects(right->getBounds()))
+            ball.velocity.x *= -1;
+
+        // powerup logic
+        for (int i = 0; i < powerUps.size(); i++) {
+            powerUps[i].updateVisual();
+
+            if (powerUps[i].expired()) {
+                powerUps.erase(powerUps.begin() + i);
+                i--;
+                continue;
+            }
+
+            if (powerUps[i].getBounds().intersects(ball.getBounds())) {
+                string t = powerUps[i].type;
+                effects.push_back(t);
+                effectTimer.restart();
+
+                if (t == "SpeedUp") ball.velocity *= 1.3f;
+                if (t == "BigPaddle") {
+                    left.shape.setSize({ 10, 150 });
+                    right->shape.setSize({ 10, 150 });
+                }
+                if (t == "SmallPaddle") {
+                    left.shape.setSize({ 10, 60 });
+                    right->shape.setSize({ 10, 60 });
+                }
+
+                powerUps.erase(powerUps.begin() + i);
+                i--;
+            }
+        }
+
+        // effect expiration 5s (BEZ teleportiranja)
+        if (!effects.empty() && effectTimer.getElapsedTime().asSeconds() > 5) {
+            // vrati brzinu na normalnu
+            if (ball.velocity.x > 0) ball.velocity.x = 5.f;
+            else ball.velocity.x = -5.f;
+
+            if (ball.velocity.y > 0) ball.velocity.y = 5.f;
+            else ball.velocity.y = -5.f;
+
+            left.shape.setSize({ 10, 100 });
+            right->shape.setSize({ 10, 100 });
+            effects.clear();
+        }
+
+        // scoring
+        if (ball.shape.getPosition().x < 0) { scoreR++; ball.reset(); }
+        if (ball.shape.getPosition().x > 800) { scoreL++; ball.reset(); }
+
+        score.setString(to_string(scoreL) + " : " + to_string(scoreR));
+
+        if (scoreL == 3 || scoreR == 3)
+            window.close();
+
+        window.clear(Color::Black);
+        window.draw(score);
+        left.draw(window);
+        right->draw(window);
+        ball.draw(window);
+        for (auto& p : powerUps) p.draw(window);
+        window.display();
     }
-
-    int mode = showMenu(menuWindow, font);
-    menuWindow.close();
-
-    startGame(mode);
-
-    cout << "Izabrano: " << (mode == 1 ? "1v1" : "1vBot") << endl;
-
-    return 0;
 }
 
+/* ================= MAIN ================= */
+int main() {
+    srand(static_cast<unsigned>(time(nullptr)));
 
+    RenderWindow menu(VideoMode(800, 600), "Menu");
+    Font font;
+    font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf");
+
+    int mode = showMenu(menu, font);
+    menu.close();
+
+    startGame(mode);
+    return 0;
+}
