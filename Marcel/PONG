@@ -7,7 +7,7 @@
 using namespace std;
 using namespace sf;
 
-/* ================= BASE ================= */
+/* ================= BAZA ================= */
 class GameObject {
 public:
     virtual void update() = 0;
@@ -29,9 +29,12 @@ public:
     }
 
     void move(float dy) {
-        if (shape.getPosition().y + dy >= 0 &&
-            shape.getPosition().y + dy <= 600 - shape.getSize().y)
-            shape.move(0, dy);
+        float newY = shape.getPosition().y + dy;
+
+        if (newY < 0) newY = 0;
+        if (newY > 600 - shape.getSize().y) newY = 600 - shape.getSize().y;
+
+        shape.setPosition(shape.getPosition().x, newY);
     }
 
     void draw(RenderWindow& window) override {
