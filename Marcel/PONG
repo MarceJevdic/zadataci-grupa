@@ -7,7 +7,6 @@
 using namespace std;
 using namespace sf;
 
-/* ================= BAZA ================= */
 class GameObject {
 public:
     virtual void update() = 0;
@@ -16,7 +15,6 @@ public:
     virtual ~GameObject() {}
 };
 
-/* ================= PADDLE ================= */
 class Paddle : public GameObject {
 public:
     RectangleShape shape;
@@ -29,12 +27,9 @@ public:
     }
 
     void move(float dy) {
-        float newY = shape.getPosition().y + dy;
-
-        if (newY < 0) newY = 0;
-        if (newY > 600 - shape.getSize().y) newY = 600 - shape.getSize().y;
-
-        shape.setPosition(shape.getPosition().x, newY);
+        if (shape.getPosition().y + dy >= 0 &&
+            shape.getPosition().y + dy <= 600 - shape.getSize().y)
+            shape.move(0, dy);
     }
 
     void draw(RenderWindow& window) override {
@@ -46,7 +41,6 @@ public:
     }
 };
 
-/* ================= PLAYER ================= */
 class PlayerPaddle : public Paddle {
     Keyboard::Key up, down;
 public:
@@ -60,7 +54,6 @@ public:
     }
 };
 
-/* ================= BOT ================= */
 class BotPaddle : public Paddle {
     const CircleShape* ball;
 public:
@@ -77,7 +70,6 @@ public:
     }
 };
 
-/* ================= BALL ================= */
 class Ball : public GameObject {
 public:
     CircleShape shape;
@@ -112,11 +104,10 @@ public:
     }
 };
 
-/* ================= POWERUPS ================= */
 class PowerUp {
 public:
     CircleShape shape;
-    string type; // "SpeedUp", "BigPaddle", "SmallPaddle"
+    string type; 
     Clock lifeTimer;
     float pulse = 0.f;
 
@@ -154,7 +145,6 @@ public:
     }
 };
 
-/* ================= MENU ================= */
 int showMenu(RenderWindow& window, Font& font) {
     vector<string> options = { "Player vs Player", "Player vs Bot" };
     vector<Text> texts;
@@ -189,7 +179,6 @@ int showMenu(RenderWindow& window, Font& font) {
     return -1;
 }
 
-/* ================= GAME ================= */
 void startGame(int mode) {
     RenderWindow window(VideoMode(800, 600), "Pong");
     window.setFramerateLimit(60);
@@ -218,7 +207,6 @@ void startGame(int mode) {
         while (window.pollEvent(e))
             if (e.type == Event::Closed) window.close();
 
-        // spawn powerups
         if (spawnClock.getElapsedTime().asSeconds() > 3) {
             vector<string> types = { "SpeedUp", "BigPaddle", "SmallPaddle" };
             string t = types[rand() % 3];
@@ -230,13 +218,11 @@ void startGame(int mode) {
         right->update();
         ball.update();
 
-        // paddle collision
         if (ball.getBounds().intersects(left.getBounds()))
             ball.velocity.x *= -1;
         if (ball.getBounds().intersects(right->getBounds()))
             ball.velocity.x *= -1;
 
-        // powerup logic
         for (int i = 0; i < powerUps.size(); i++) {
             powerUps[i].updateVisual();
 
@@ -266,9 +252,8 @@ void startGame(int mode) {
             }
         }
 
-        // effect expiration 5s (BEZ teleportiranja)
         if (!effects.empty() && effectTimer.getElapsedTime().asSeconds() > 5) {
-            // vrati brzinu na normalnu
+            
             if (ball.velocity.x > 0) ball.velocity.x = 5.f;
             else ball.velocity.x = -5.f;
 
@@ -280,7 +265,7 @@ void startGame(int mode) {
             effects.clear();
         }
 
-        // scoring
+        
         if (ball.shape.getPosition().x < 0) { scoreR++; ball.reset(); }
         if (ball.shape.getPosition().x > 800) { scoreL++; ball.reset(); }
 
@@ -299,7 +284,6 @@ void startGame(int mode) {
     }
 }
 
-/* ================= MAIN ================= */
 int main() {
     srand(static_cast<unsigned>(time(nullptr)));
 
